@@ -1,49 +1,432 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "涉案请托资金追缴协作共享资料",
+  "description": "跨单位追缴协作的证据图结构：资金批次、流转事件、主张与司法认定分离、版本留痕、阶段权限与定性情形测算。金额单位为元，拆分与合并必须守恒。",
   "type": "object",
   "required": [
     "domain",
     "version",
     "sample_id",
+    "unit_of_account",
     "actors",
+    "holders",
+    "evidence",
+    "fund_batches",
+    "events",
+    "claims",
+    "findings",
+    "revisions",
+    "case_transfers",
+    "recovery_targets",
+    "leads",
+    "scenarios",
+    "restitution_progress",
+    "case",
     "facts",
     "constraints"
   ],
+  "additionalProperties": false,
   "properties": {
-    "domain": {
-      "type": "string",
-      "minLength": 1
-    },
-    "version": {
-      "type": "integer",
-      "minimum": 1
-    },
-    "sample_id": {
-      "type": "string",
-      "minLength": 1
-    },
+    "domain": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "sample_id": { "type": "string", "minLength": 1 },
+    "unit_of_account": { "type": "string", "minLength": 1 },
     "actors": {
       "type": "array",
       "minItems": 2,
-      "items": {
-        "type": "string"
-      }
+      "items": { "$ref": "#/$defs/actor" }
     },
+    "holders": {
+      "type": "array",
+      "minItems": 2,
+      "items": { "$ref": "#/$defs/holder" }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "fund_batches": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/fund_batch" }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/event" }
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "revisions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/revision" }
+    },
+    "case_transfers": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/case_transfer" }
+    },
+    "recovery_targets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/recovery_target" }
+    },
+    "leads": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/lead" }
+    },
+    "scenarios": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/scenario" }
+    },
+    "restitution_progress": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/restitution_entry" }
+    },
+    "case": { "$ref": "#/$defs/case_info" },
     "facts": {
       "type": "array",
       "minItems": 2,
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     },
     "constraints": {
       "type": "array",
       "minItems": 2,
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     }
   },
-  "additionalProperties": false
+  "$defs": {
+    "actor": {
+      "type": "object",
+      "required": ["id", "kind", "org"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": {
+          "type": "string",
+          "enum": ["investigator", "prosecutor", "judge", "custodian", "family"]
+        },
+        "org": { "type": "string", "minLength": 1 }
+      }
+    },
+    "holder": {
+      "type": "object",
+      "required": ["id", "kind", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "enum": ["person", "authority"] },
+        "label": { "type": "string", "minLength": 1 }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["id", "kind", "amount", "issued_on", "summary"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "transfer_voucher",
+            "cash_estimate",
+            "withdrawal_record",
+            "statement_record",
+            "iou_document",
+            "seizure_record",
+            "restitution_receipt",
+            "forfeiture_order"
+          ]
+        },
+        "amount": { "type": "integer", "exclusiveMinimum": 0 },
+        "issued_on": { "type": "string", "format": "date" },
+        "summary": { "type": "string", "minLength": 1 },
+        "corrections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["date", "from_amount", "to_amount", "revision_id"],
+            "additionalProperties": false,
+            "properties": {
+              "date": { "type": "string", "format": "date" },
+              "from_amount": { "type": "integer", "exclusiveMinimum": 0 },
+              "to_amount": { "type": "integer", "exclusiveMinimum": 0 },
+              "revision_id": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "fund_batch": {
+      "type": "object",
+      "required": ["id", "amount", "created_by", "created_on", "delivery", "certainty"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "amount": { "type": "integer", "exclusiveMinimum": 0 },
+        "created_by": { "type": "string", "minLength": 1 },
+        "created_on": { "type": "string", "format": "date" },
+        "delivery": { "$ref": "#/$defs/delivery" },
+        "certainty": { "$ref": "#/$defs/certainty" }
+      }
+    },
+    "event": {
+      "type": "object",
+      "required": [
+        "id",
+        "date",
+        "kind",
+        "delivery",
+        "from_holder",
+        "to_holder",
+        "inputs",
+        "outputs",
+        "evidence",
+        "certainty",
+        "note"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "format": "date" },
+        "kind": {
+          "type": "string",
+          "enum": ["deliver", "return", "intercept", "seize", "restitution"]
+        },
+        "delivery": { "$ref": "#/$defs/delivery" },
+        "from_holder": { "type": "string", "minLength": 1 },
+        "to_holder": { "type": "string", "minLength": 1 },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["batch", "amount"],
+            "additionalProperties": false,
+            "properties": {
+              "batch": { "type": "string", "minLength": 1 },
+              "amount": { "type": "integer", "exclusiveMinimum": 0 }
+            }
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["batch", "amount", "holder"],
+            "additionalProperties": false,
+            "properties": {
+              "batch": { "type": "string", "minLength": 1 },
+              "amount": { "type": "integer", "exclusiveMinimum": 0 },
+              "holder": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "certainty": { "$ref": "#/$defs/certainty" },
+        "note": { "type": "string" }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "required": ["id", "asserter", "nature", "about", "evidence", "version", "history"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "asserter": { "type": "string", "minLength": 1 },
+        "nature": { "type": "string", "minLength": 1 },
+        "about": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "version": { "type": "integer", "minimum": 1 },
+        "history": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["version", "date", "nature", "note"],
+            "additionalProperties": false,
+            "properties": {
+              "version": { "type": "integer", "minimum": 1 },
+              "date": { "type": "string", "format": "date" },
+              "nature": { "type": "string", "minLength": 1 },
+              "note": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": ["id", "issued_by", "date", "subject", "amount", "events", "evidence", "dispositions", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "issued_by": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "format": "date" },
+        "subject": { "type": "string", "minLength": 1 },
+        "amount": { "type": "integer", "exclusiveMinimum": 0 },
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "dispositions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind", "amount", "event"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["restitution", "forfeiture"] },
+              "amount": { "type": "integer", "exclusiveMinimum": 0 },
+              "event": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "note": { "type": "string" }
+      }
+    },
+    "revision": {
+      "type": "object",
+      "required": ["id", "date", "kind", "refs", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "format": "date" },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "cash_estimate_correction",
+            "testimony_reversal",
+            "case_transfer",
+            "recovery_target_change",
+            "partial_restitution"
+          ]
+        },
+        "refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "case_transfer": {
+      "type": "object",
+      "required": ["id", "date", "from_org", "to_org", "revision_id", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "format": "date" },
+        "from_org": { "type": "string", "minLength": 1 },
+        "to_org": { "type": "string", "minLength": 1 },
+        "revision_id": { "type": "string", "minLength": 1 },
+        "note": { "type": "string" }
+      }
+    },
+    "recovery_target": {
+      "type": "object",
+      "required": ["id", "holder", "since", "until", "status", "revision_id", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "holder": { "type": "string", "minLength": 1 },
+        "since": { "type": "string", "format": "date" },
+        "until": { "type": ["string", "null"], "format": "date" },
+        "status": { "type": "string", "enum": ["active", "closed"] },
+        "revision_id": { "type": ["string", "null"] },
+        "note": { "type": "string" }
+      }
+    },
+    "lead": {
+      "type": "object",
+      "required": ["id", "date", "summary", "status", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "format": "date" },
+        "summary": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "enum": ["open", "closed"] },
+        "note": { "type": "string" }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["id", "label", "classifications", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "classifications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["batch", "bucket"],
+            "additionalProperties": false,
+            "properties": {
+              "batch": { "type": "string", "minLength": 1 },
+              "bucket": {
+                "type": "string",
+                "enum": ["illicit", "disputed", "excluded"]
+              }
+            }
+          }
+        },
+        "note": { "type": "string" }
+      }
+    },
+    "restitution_entry": {
+      "type": "object",
+      "required": ["id", "date", "amount", "channel", "public_note"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "format": "date" },
+        "amount": { "type": "integer", "exclusiveMinimum": 0 },
+        "channel": { "type": "string", "minLength": 1 },
+        "public_note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "case_info": {
+      "type": "object",
+      "required": ["id", "title", "current_stage", "opened_on"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "current_stage": {
+          "type": "string",
+          "enum": ["investigation", "prosecution", "trial", "enforcement"]
+        },
+        "opened_on": { "type": "string", "format": "date" }
+      }
+    },
+    "delivery": {
+      "type": "string",
+      "enum": ["cash", "transfer", "seizure", "restitution", "forfeiture"]
+    },
+    "certainty": {
+      "type": "string",
+      "enum": ["claimed", "evidenced", "confirmed", "derived"]
+    }
+  }
 }

@@ -1,13 +1,276 @@
 {
   "domain": "illicit-fund-recovery",
-  "version": 1,
+  "version": 2,
   "sample_id": "record-009",
+  "unit_of_account": "CNY-yuan",
   "actors": [
-    "侦查人员",
-    "检察与审判人员",
-    "涉案财物管理人员",
-    "依法查询的相关当事人"
+    { "id": "ACT-INV", "kind": "investigator", "org": "办案侦查机关" },
+    { "id": "ACT-PRO", "kind": "prosecutor", "org": "审查起诉机关" },
+    { "id": "ACT-JUD", "kind": "judge", "org": "审判机关" },
+    { "id": "ACT-CUS", "kind": "custodian", "org": "涉案财物保管机构" },
+    { "id": "ACT-FAM", "kind": "family", "org": "依法查询的相关当事人" }
   ],
+  "holders": [
+    { "id": "H-JIA", "kind": "person", "label": "请托人（化名甲）" },
+    { "id": "H-YI", "kind": "person", "label": "中间人（化名乙）" },
+    { "id": "H-BING", "kind": "person", "label": "收款人（化名丙）" },
+    { "id": "H-POL", "kind": "authority", "label": "侦查机关扣押账户" },
+    { "id": "H-TRE", "kind": "authority", "label": "国库" }
+  ],
+  "evidence": [
+    { "id": "V-01", "kind": "transfer_voucher", "amount": 2000000, "issued_on": "2020-03-15", "summary": "甲向乙银行转账二百万元回单" },
+    { "id": "V-02", "kind": "cash_estimate", "amount": 1000000, "issued_on": "2020-03-16", "summary": "甲向乙交付现金估算金额，经取款记录修正", "corrections": [
+      { "date": "2020-04-02", "from_amount": 1200000, "to_amount": 1000000, "revision_id": "R-1" }
+    ] },
+    { "id": "V-03", "kind": "withdrawal_record", "amount": 1000000, "issued_on": "2020-03-14", "summary": "甲同期取现记录，用于修正现金估算" },
+    { "id": "V-04", "kind": "transfer_voucher", "amount": 1600000, "issued_on": "2020-03-20", "summary": "乙向丙银行转账一百六十万元回单" },
+    { "id": "V-05", "kind": "statement_record", "amount": 400000, "issued_on": "2020-03-21", "summary": "乙向丙交付现金四十万元，仅有言词记录" },
+    { "id": "V-06", "kind": "transfer_voucher", "amount": 1000000, "issued_on": "2021-09-10", "summary": "丙向乙退回一百万元转账回单" },
+    { "id": "V-07", "kind": "transfer_voucher", "amount": 600000, "issued_on": "2022-01-15", "summary": "乙向甲退回六十万元转账回单" },
+    { "id": "V-08", "kind": "iou_document", "amount": 400000, "issued_on": "2022-02-01", "summary": "乙将截留四十万元包装为借款所立借条" },
+    { "id": "V-09", "kind": "seizure_record", "amount": 1000000, "issued_on": "2023-06-01", "summary": "侦查机关对丙扣押一百万元决定书（转账线六十万元、现金线四十万元）" },
+    { "id": "V-10", "kind": "seizure_record", "amount": 500000, "issued_on": "2023-06-02", "summary": "侦查机关对乙扣押五十万元决定书" },
+    { "id": "V-11", "kind": "restitution_receipt", "amount": 1000000, "issued_on": "2024-03-10", "summary": "扣押款中一百万元退赔甲的收据" },
+    { "id": "V-12", "kind": "forfeiture_order", "amount": 400000, "issued_on": "2024-03-10", "summary": "扣押款中四十万元上缴国库凭证" }
+  ],
+  "fund_batches": [
+    { "id": "B-01", "amount": 2000000, "created_by": "E-01", "created_on": "2020-03-15", "delivery": "transfer", "certainty": "evidenced" },
+    { "id": "B-02", "amount": 1000000, "created_by": "E-02", "created_on": "2020-03-16", "delivery": "cash", "certainty": "evidenced" },
+    { "id": "B-03", "amount": 1600000, "created_by": "E-03", "created_on": "2020-03-20", "delivery": "transfer", "certainty": "evidenced" },
+    { "id": "B-16", "amount": 400000, "created_by": "E-03", "created_on": "2020-03-20", "delivery": "cash", "certainty": "derived" },
+    { "id": "B-04", "amount": 400000, "created_by": "E-04", "created_on": "2020-03-21", "delivery": "cash", "certainty": "claimed" },
+    { "id": "B-05", "amount": 500000, "created_by": "E-05", "created_on": "2020-03-22", "delivery": "cash", "certainty": "derived" },
+    { "id": "B-17", "amount": 500000, "created_by": "E-05", "created_on": "2020-03-22", "delivery": "cash", "certainty": "derived" },
+    { "id": "B-06", "amount": 1000000, "created_by": "E-06", "created_on": "2021-09-10", "delivery": "transfer", "certainty": "evidenced" },
+    { "id": "B-18", "amount": 600000, "created_by": "E-06", "created_on": "2021-09-10", "delivery": "transfer", "certainty": "evidenced" },
+    { "id": "B-07", "amount": 600000, "created_by": "E-07", "created_on": "2022-01-15", "delivery": "transfer", "certainty": "evidenced" },
+    { "id": "B-08", "amount": 400000, "created_by": "E-07", "created_on": "2022-01-15", "delivery": "cash", "certainty": "derived" },
+    { "id": "B-09", "amount": 500000, "created_by": "E-08", "created_on": "2023-06-01", "delivery": "seizure", "certainty": "confirmed" },
+    { "id": "B-10", "amount": 500000, "created_by": "E-08", "created_on": "2023-06-01", "delivery": "seizure", "certainty": "confirmed" },
+    { "id": "B-11", "amount": 500000, "created_by": "E-09", "created_on": "2023-06-02", "delivery": "seizure", "certainty": "confirmed" },
+    { "id": "B-12", "amount": 600000, "created_by": "E-10", "created_on": "2024-03-10", "delivery": "restitution", "certainty": "confirmed" },
+    { "id": "B-13", "amount": 400000, "created_by": "E-10", "created_on": "2024-03-10", "delivery": "forfeiture", "certainty": "confirmed" },
+    { "id": "B-14", "amount": 400000, "created_by": "E-11", "created_on": "2024-03-10", "delivery": "restitution", "certainty": "confirmed" },
+    { "id": "B-15", "amount": 100000, "created_by": "E-11", "created_on": "2024-03-10", "delivery": "seizure", "certainty": "confirmed" }
+  ],
+  "events": [
+    {
+      "id": "E-01", "date": "2020-03-15", "kind": "deliver", "delivery": "transfer",
+      "from_holder": "H-JIA", "to_holder": "H-YI",
+      "inputs": [], "outputs": [{ "batch": "B-01", "amount": 2000000, "holder": "H-YI" }],
+      "evidence": ["V-01"], "certainty": "evidenced",
+      "note": "甲以找关系干预案件为名向乙转账二百万元"
+    },
+    {
+      "id": "E-02", "date": "2020-03-16", "kind": "deliver", "delivery": "cash",
+      "from_holder": "H-JIA", "to_holder": "H-YI",
+      "inputs": [], "outputs": [{ "batch": "B-02", "amount": 1000000, "holder": "H-YI" }],
+      "evidence": ["V-02", "V-03"], "certainty": "evidenced",
+      "note": "甲向乙交付现金，估算一百二十万元经取现记录修正为一百万元"
+    },
+    {
+      "id": "E-03", "date": "2020-03-20", "kind": "deliver", "delivery": "transfer",
+      "from_holder": "H-YI", "to_holder": "H-BING",
+      "inputs": [{ "batch": "B-01", "amount": 2000000 }],
+      "outputs": [
+        { "batch": "B-03", "amount": 1600000, "holder": "H-BING" },
+        { "batch": "B-16", "amount": 400000, "holder": "H-YI" }
+      ],
+      "evidence": ["V-04"], "certainty": "evidenced",
+      "note": "乙向丙转账一百六十万元，另四十万元留存备付现金"
+    },
+    {
+      "id": "E-04", "date": "2020-03-21", "kind": "deliver", "delivery": "cash",
+      "from_holder": "H-YI", "to_holder": "H-BING",
+      "inputs": [{ "batch": "B-16", "amount": 400000 }],
+      "outputs": [{ "batch": "B-04", "amount": 400000, "holder": "H-BING" }],
+      "evidence": ["V-05"], "certainty": "claimed",
+      "note": "乙向丙交付现金四十万元，仅有言词记录佐证，可认定程度低于转账"
+    },
+    {
+      "id": "E-05", "date": "2020-03-22", "kind": "intercept", "delivery": "cash",
+      "from_holder": "H-YI", "to_holder": "H-YI",
+      "inputs": [{ "batch": "B-02", "amount": 1000000 }],
+      "outputs": [
+        { "batch": "B-05", "amount": 500000, "holder": "H-YI" },
+        { "batch": "B-17", "amount": 500000, "holder": "H-YI" }
+      ],
+      "evidence": [], "certainty": "derived",
+      "note": "乙截留现金一百万元，拆为两批以便后续分别扣押与追缴"
+    },
+    {
+      "id": "E-06", "date": "2021-09-10", "kind": "return", "delivery": "transfer",
+      "from_holder": "H-BING", "to_holder": "H-YI",
+      "inputs": [{ "batch": "B-03", "amount": 1600000 }],
+      "outputs": [
+        { "batch": "B-06", "amount": 1000000, "holder": "H-YI" },
+        { "batch": "B-18", "amount": 600000, "holder": "H-BING" }
+      ],
+      "evidence": ["V-06"], "certainty": "evidenced",
+      "note": "请托事项未成，丙向乙退回一百万元，余六十万元仍在丙处"
+    },
+    {
+      "id": "E-07", "date": "2022-01-15", "kind": "return", "delivery": "transfer",
+      "from_holder": "H-YI", "to_holder": "H-JIA",
+      "inputs": [{ "batch": "B-06", "amount": 1000000 }],
+      "outputs": [
+        { "batch": "B-07", "amount": 600000, "holder": "H-JIA" },
+        { "batch": "B-08", "amount": 400000, "holder": "H-YI" }
+      ],
+      "evidence": ["V-07"], "certainty": "evidenced",
+      "note": "乙向甲退回六十万元，截留四十万元并以借条包装为借款"
+    },
+    {
+      "id": "E-08", "date": "2023-06-01", "kind": "seize", "delivery": "seizure",
+      "from_holder": "H-BING", "to_holder": "H-POL",
+      "inputs": [
+        { "batch": "B-18", "amount": 600000 },
+        { "batch": "B-04", "amount": 400000 }
+      ],
+      "outputs": [
+        { "batch": "B-09", "amount": 500000, "holder": "H-POL" },
+        { "batch": "B-10", "amount": 500000, "holder": "H-POL" }
+      ],
+      "evidence": ["V-09"], "certainty": "confirmed",
+      "note": "侦查机关对丙扣押一百万元，合并转账线与现金线"
+    },
+    {
+      "id": "E-09", "date": "2023-06-02", "kind": "seize", "delivery": "seizure",
+      "from_holder": "H-YI", "to_holder": "H-POL",
+      "inputs": [{ "batch": "B-17", "amount": 500000 }],
+      "outputs": [{ "batch": "B-11", "amount": 500000, "holder": "H-POL" }],
+      "evidence": ["V-10"], "certainty": "confirmed",
+      "note": "侦查机关对乙截留款中的五十万元予以扣押"
+    },
+    {
+      "id": "E-10", "date": "2024-03-10", "kind": "restitution", "delivery": "restitution",
+      "from_holder": "H-POL", "to_holder": "H-JIA",
+      "inputs": [
+        { "batch": "B-09", "amount": 500000 },
+        { "batch": "B-10", "amount": 500000 }
+      ],
+      "outputs": [
+        { "batch": "B-12", "amount": 600000, "holder": "H-JIA" },
+        { "batch": "B-13", "amount": 400000, "holder": "H-TRE" }
+      ],
+      "evidence": ["V-11", "V-12"], "certainty": "confirmed",
+      "note": "判决执行（丙线扣押款一百万元）：六十万元退赔甲、四十万元上缴国库"
+    },
+    {
+      "id": "E-11", "date": "2024-03-10", "kind": "restitution", "delivery": "restitution",
+      "from_holder": "H-POL", "to_holder": "H-JIA",
+      "inputs": [{ "batch": "B-11", "amount": 500000 }],
+      "outputs": [
+        { "batch": "B-14", "amount": 400000, "holder": "H-JIA" },
+        { "batch": "B-15", "amount": 100000, "holder": "H-POL" }
+      ],
+      "evidence": ["V-11"], "certainty": "confirmed",
+      "note": "判决执行（乙线扣押款五十万元）：四十万元退赔甲，余十万元仍在扣押账户待处置"
+    }
+  ],
+  "claims": [
+    {
+      "id": "C-1", "asserter": "H-JIA", "nature": "请托报酬",
+      "about": ["E-01", "E-02"], "evidence": ["V-01", "V-02"], "version": 1,
+      "history": [{ "version": 1, "date": "2020-03-20", "nature": "请托报酬", "note": "甲称三百万元系托乙找关系干预案件的报酬" }]
+    },
+    {
+      "id": "C-2", "asserter": "H-YI", "nature": "流水事实",
+      "about": ["E-04"], "evidence": ["V-05"], "version": 2,
+      "history": [
+        { "version": 1, "date": "2021-10-05", "nature": "流水事实", "note": "乙先称四十万元现金已全额转交丙" },
+        { "version": 2, "date": "2022-03-01", "nature": "流水事实", "note": "乙改称仅部分现金交付丙，证言发生翻转" }
+      ]
+    },
+    {
+      "id": "C-3", "asserter": "H-YI", "nature": "借款",
+      "about": ["E-07"], "evidence": ["V-08"], "version": 1,
+      "history": [{ "version": 1, "date": "2022-02-01", "nature": "借款", "note": "乙以借条将截留的四十万元包装为借款" }]
+    },
+    {
+      "id": "C-4", "asserter": "H-YI", "nature": "居间报酬",
+      "about": ["E-07"], "evidence": [], "version": 1,
+      "history": [{ "version": 1, "date": "2022-02-01", "nature": "居间报酬", "note": "乙另称截留的四十万元系其应得居间报酬" }]
+    },
+    {
+      "id": "C-5", "asserter": "H-JIA", "nature": "退款",
+      "about": ["E-07"], "evidence": ["V-07"], "version": 1,
+      "history": [{ "version": 1, "date": "2022-01-16", "nature": "退款", "note": "甲称乙退回的六十万元系部分退款" }]
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-1", "issued_by": "ACT-JUD", "date": "2024-03-01",
+      "subject": "丙收取二百万元事实",
+      "amount": 2000000,
+      "events": ["E-03", "E-04", "E-06", "E-08", "E-10"],
+      "evidence": ["V-04", "V-05", "V-06", "V-09", "V-11", "V-12"],
+      "dispositions": [
+        { "kind": "restitution", "amount": 600000, "event": "E-10" },
+        { "kind": "forfeiture", "amount": 400000, "event": "E-10" }
+      ],
+      "note": "生效判决认定丙实际取得二百万元，其被扣押一百万元中六十万元退赔甲、四十万元没收上缴国库"
+    },
+    {
+      "id": "F-2", "issued_by": "ACT-JUD", "date": "2024-03-01",
+      "subject": "乙截留一百万元事实",
+      "amount": 1000000,
+      "events": ["E-05", "E-07", "E-09", "E-11"],
+      "evidence": ["V-07", "V-08", "V-10", "V-11"],
+      "dispositions": [
+        { "kind": "restitution", "amount": 400000, "event": "E-11" }
+      ],
+      "note": "判决认定乙截留一百万元，其中四十万元以借条包装；其被扣押五十万元中四十万元退赔甲、余十万元待处置，另五十万元继续追缴，法律定性按情形保留"
+    }
+  ],
+  "revisions": [
+    { "id": "R-1", "date": "2020-04-02", "kind": "cash_estimate_correction", "refs": ["V-02"], "reason": "现金交付估算由一百二十万元修正为一百万元，以同期取现记录为准" },
+    { "id": "R-2", "date": "2022-03-01", "kind": "testimony_reversal", "refs": ["C-2"], "reason": "乙关于四十万元现金去向的证言翻转，前后版本均留痕" },
+    { "id": "R-3", "date": "2023-07-01", "kind": "case_transfer", "refs": ["T-1"], "reason": "案件由甲地侦查机关移送乙地侦查机关并案办理" },
+    { "id": "R-4", "date": "2023-08-01", "kind": "recovery_target_change", "refs": ["RT-2"], "reason": "追缴对象由丙扩展至乙，就截留部分继续追缴" },
+    { "id": "R-5", "date": "2024-03-10", "kind": "partial_restitution", "refs": ["E-10", "E-11"], "reason": "扣押款部分退赔被害人，其余上缴国库或待处置，退赔进度更新" }
+  ],
+  "case_transfers": [
+    { "id": "T-1", "date": "2023-07-01", "from_org": "甲地侦查机关", "to_org": "乙地侦查机关", "revision_id": "R-3", "note": "移送后侦查阶段权限随之切换" }
+  ],
+  "recovery_targets": [
+    { "id": "RT-1", "holder": "H-BING", "since": "2023-06-01", "until": "2023-08-01", "status": "closed", "revision_id": null, "note": "初期以丙为追缴对象" },
+    { "id": "RT-2", "holder": "H-YI", "since": "2023-08-01", "until": null, "status": "active", "revision_id": "R-4", "note": "就乙截留未扣押部分继续追缴" }
+  ],
+  "leads": [
+    { "id": "L-1", "date": "2023-09-01", "summary": "乙可能将部分截留资金转移至亲属账户", "status": "open", "note": "未经查证，不计入账本与追缴汇总" },
+    { "id": "L-2", "date": "2023-10-15", "summary": "丙另有现金存放于第三处住所", "status": "open", "note": "未经查证，不计入账本与追缴汇总" }
+  ],
+  "scenarios": [
+    {
+      "id": "S-1", "label": "诈骗定性情形",
+      "classifications": [
+        { "batch": "B-05", "bucket": "illicit" },
+        { "batch": "B-08", "bucket": "illicit" },
+        { "batch": "B-15", "bucket": "illicit" }
+      ],
+      "note": "若全案按诈骗定性，乙截留未缴款项与扣押账户余款均属违法所得，应继续全额追缴退赔或没收"
+    },
+    {
+      "id": "S-2", "label": "行贿关联定性情形",
+      "classifications": [
+        { "batch": "B-05", "bucket": "illicit" },
+        { "batch": "B-08", "bucket": "disputed" },
+        { "batch": "B-15", "bucket": "illicit" }
+      ],
+      "note": "若按行贿关联定性，以借条包装的四十万元究系借款还是截留赃款存在争议，待审判决定"
+    }
+  ],
+  "restitution_progress": [
+    { "id": "P-1", "date": "2022-01-15", "amount": 600000, "channel": "诉前退回", "public_note": "中间人向请托人退回部分款项" },
+    { "id": "P-2", "date": "2024-03-10", "amount": 1000000, "channel": "判决退赔", "public_note": "扣押款中一百万元依法退赔请托人" }
+  ],
+  "case": {
+    "id": "CASE-001",
+    "title": "化名甲请托资金案（示例）",
+    "current_stage": "enforcement",
+    "opened_on": "2023-05-20"
+  },
   "facts": [
     "涉案三百万元经历多次退回、截留和扣押",
     "现金与转账证据的可认定程度不同",
@@ -17,6 +280,7 @@
     "资金批次守恒",
     "证言与凭证关联",
     "跨阶段案件移送",
-    "追缴退赔状态"
+    "追缴退赔状态",
+    "未经证实的说法与司法确认分离"
   ]
 }
