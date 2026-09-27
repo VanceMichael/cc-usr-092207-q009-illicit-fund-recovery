@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "涉案请托资金追缴协作案件事件流",
+  "type": "object",
+  "required": ["case_id", "reported_total_yuan", "parties", "events"],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reported_total_yuan": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "报案金额（元），仅作参照；登记基准以交付登记与现金估算修正为准"
+    },
+    "parties": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "actor", "occurred_on", "recorded_on", "payload"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "kind": {
+            "enum": [
+              "delivery",
+              "transfer_onward",
+              "return_to_payer",
+              "form_change",
+              "cash_estimate_correction",
+              "claim",
+              "testimony_reversal",
+              "lead",
+              "seizure",
+              "restitution",
+              "surrender",
+              "disburse",
+              "case_transfer",
+              "recovery_target_change",
+              "court_finding"
+            ]
+          },
+          "actor": {
+            "enum": ["侦查人员", "检察人员", "审判人员", "涉案财物管理人员", "家属"]
+          },
+          "occurred_on": { "type": "string", "minLength": 1 },
+          "recorded_on": { "type": "string", "minLength": 1 },
+          "note": { "type": "string" },
+          "payload": { "type": "object" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

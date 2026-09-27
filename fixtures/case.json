@@ -1,0 +1,300 @@
+{
+  "case_id": "CASE-2021-009",
+  "reported_total_yuan": 3000000,
+  "parties": [
+    { "id": "P-JIA", "label": "请托人甲" },
+    { "id": "P-YI", "label": "中间人乙" },
+    { "id": "P-BING", "label": "关系人丙" },
+    { "id": "P-CUSTODY", "label": "涉案财物保管账户" },
+    { "id": "P-TREASURY", "label": "国库" }
+  ],
+  "events": [
+    {
+      "id": "E01",
+      "kind": "delivery",
+      "actor": "侦查人员",
+      "occurred_on": "2019-03-09",
+      "recorded_on": "2021-05-02",
+      "payload": {
+        "batch": "B1",
+        "amount_yuan": 1180000,
+        "form": "现金",
+        "from": "P-JIA",
+        "to": "P-YI",
+        "amount_status": "估算",
+        "testimony": [{ "id": "T-YI-01", "by": "P-YI" }]
+      },
+      "note": "乙供述收到甲现金118万元，金额系估算"
+    },
+    {
+      "id": "E02",
+      "kind": "delivery",
+      "actor": "侦查人员",
+      "occurred_on": "2019-03-12",
+      "recorded_on": "2021-05-02",
+      "payload": {
+        "batch": "B2",
+        "amount_yuan": 1800000,
+        "form": "转账",
+        "from": "P-JIA",
+        "to": "P-YI",
+        "vouchers": ["V-02"]
+      },
+      "note": "甲向乙转账180万元，有银行流水"
+    },
+    {
+      "id": "E03",
+      "kind": "cash_estimate_correction",
+      "actor": "侦查人员",
+      "occurred_on": "2021-05-10",
+      "recorded_on": "2021-05-10",
+      "payload": {
+        "batch": "B1",
+        "new_amount_yuan": 1200000,
+        "reason": "甲提供2019-03-08取现凭证120万元，乙无异议，修正现金估算",
+        "vouchers": ["V-01"],
+        "testimony": [{ "id": "T-JIA-01", "by": "P-JIA" }]
+      },
+      "note": "现金估算由118万元修正为120万元，登记基准随之调整为300万元"
+    },
+    {
+      "id": "E04",
+      "kind": "transfer_onward",
+      "actor": "侦查人员",
+      "occurred_on": "2019-03-20",
+      "recorded_on": "2021-05-12",
+      "payload": {
+        "from_batch": "B2",
+        "parts": [
+          { "batch": "B2a", "amount_yuan": 1000000, "to": "P-BING", "vouchers": ["V-03"], "note": "乙向丙转账100万元" },
+          { "batch": "B2b", "amount_yuan": 800000, "to": "P-YI", "note": "余款80万元留存乙处" }
+        ]
+      },
+      "note": "转账部分拆分流转"
+    },
+    {
+      "id": "E05",
+      "kind": "transfer_onward",
+      "actor": "侦查人员",
+      "occurred_on": "2019-04-02",
+      "recorded_on": "2021-05-12",
+      "payload": {
+        "from_batch": "B1",
+        "parts": [
+          { "batch": "B1a", "amount_yuan": 700000, "to": "P-BING", "testimony": [{ "id": "T-YI-02", "by": "P-YI" }], "note": "乙称现金70万元转交丙，丙否认收到" },
+          { "batch": "B1b", "amount_yuan": 500000, "to": "P-YI", "testimony": [{ "id": "T-YI-02", "by": "P-YI" }], "note": "乙自认留存现金50万元" }
+        ]
+      },
+      "note": "现金部分按乙供述拆分，丙对70万元去向有异议"
+    },
+    {
+      "id": "E06",
+      "kind": "return_to_payer",
+      "actor": "侦查人员",
+      "occurred_on": "2020-01-15",
+      "recorded_on": "2021-05-12",
+      "payload": {
+        "from_batch": "B2b",
+        "returned": { "batch": "B2b1", "amount_yuan": 500000, "to": "P-JIA", "vouchers": ["V-04"], "note": "乙向甲转账退回50万元" },
+        "remainder": { "batch": "B2b2", "amount_yuan": 300000, "note": "余款30万元留存乙处" }
+      },
+      "note": "甲催讨后乙退回50万元"
+    },
+    {
+      "id": "E07",
+      "kind": "claim",
+      "actor": "侦查人员",
+      "occurred_on": "2021-05-20",
+      "recorded_on": "2021-05-20",
+      "payload": {
+        "claim": "C-01",
+        "batches": ["B2b2"],
+        "nature": "借款",
+        "claimant": "P-YI",
+        "testimony": [{ "id": "T-YI-03", "by": "P-YI" }],
+        "documents": ["D-01"],
+        "note": "乙出具借条，主张留存30万元系向甲借款"
+      }
+    },
+    {
+      "id": "E08",
+      "kind": "claim",
+      "actor": "侦查人员",
+      "occurred_on": "2021-05-20",
+      "recorded_on": "2021-05-20",
+      "payload": {
+        "claim": "C-02",
+        "batches": ["B2a"],
+        "nature": "报酬",
+        "claimant": "P-BING",
+        "testimony": [{ "id": "T-BING-01", "by": "P-BING" }],
+        "note": "丙主张100万元系咨询报酬"
+      }
+    },
+    {
+      "id": "E09",
+      "kind": "lead",
+      "actor": "侦查人员",
+      "occurred_on": "2021-05-21",
+      "recorded_on": "2021-05-21",
+      "payload": {
+        "lead": "L-01",
+        "batches": ["B2b2", "B1b"],
+        "description": "乙向甲称300万元全部转交丙，银行流水仅显示向丙转账100万元，差额涉嫌截留",
+        "vouchers": ["V-02", "V-03", "V-04"]
+      },
+      "note": "截留线索待核查"
+    },
+    {
+      "id": "E10",
+      "kind": "form_change",
+      "actor": "侦查人员",
+      "occurred_on": "2020-03-05",
+      "recorded_on": "2021-06-01",
+      "payload": {
+        "batch": "B2b2",
+        "new_form": "现金",
+        "vouchers": ["V-05"],
+        "note": "乙将30万元取现"
+      }
+    },
+    {
+      "id": "E11",
+      "kind": "seizure",
+      "actor": "侦查人员",
+      "occurred_on": "2021-06-11",
+      "recorded_on": "2021-06-11",
+      "payload": {
+        "batch": "B2b2",
+        "to": "P-CUSTODY",
+        "vouchers": ["V-06"],
+        "note": "扣押乙处现金30万元，扣押清单在案"
+      }
+    },
+    {
+      "id": "E12",
+      "kind": "seizure",
+      "actor": "侦查人员",
+      "occurred_on": "2021-06-11",
+      "recorded_on": "2021-06-11",
+      "payload": {
+        "batch": "B2a",
+        "to": "P-CUSTODY",
+        "vouchers": ["V-07"],
+        "note": "冻结丙账户100万元"
+      }
+    },
+    {
+      "id": "E13",
+      "kind": "testimony_reversal",
+      "actor": "侦查人员",
+      "occurred_on": "2021-08-02",
+      "recorded_on": "2021-08-02",
+      "payload": {
+        "testimony": "T-BING-01",
+        "reason": "丙改称100万元系代收款项，撤回此前报酬说法"
+      },
+      "note": "丙证言翻转，报酬主张支持坍塌"
+    },
+    {
+      "id": "E14",
+      "kind": "case_transfer",
+      "actor": "侦查人员",
+      "occurred_on": "2021-09-01",
+      "recorded_on": "2021-09-01",
+      "payload": { "to_stage": "审查起诉" },
+      "note": "侦查终结，移送审查起诉"
+    },
+    {
+      "id": "E15",
+      "kind": "recovery_target_change",
+      "actor": "检察人员",
+      "occurred_on": "2021-10-15",
+      "recorded_on": "2021-10-15",
+      "payload": {
+        "targets": [
+          { "party": "P-YI", "amount_yuan": 800000, "batches": ["B1b", "B2b2"], "basis": "截留并持有请托资金余款" },
+          { "party": "P-BING", "amount_yuan": 1000000, "batches": ["B2a"], "basis": "收受请托资金100万元" }
+        ],
+        "note": "B2b1已退回甲不列入追缴；B1a去向待查，视核查结果调整追缴对象"
+      },
+      "note": "检察确定追缴对象"
+    },
+    {
+      "id": "E16",
+      "kind": "restitution",
+      "actor": "涉案财物管理人员",
+      "occurred_on": "2021-10-28",
+      "recorded_on": "2021-10-28",
+      "payload": {
+        "from_batch": "B2b2",
+        "restituted": { "batch": "B2b2-t", "amount_yuan": 120000, "to": "P-CUSTODY", "note": "从扣押款中划拨12万元退赔甲，暂存保管账户待发还" },
+        "remainder": { "batch": "B2b2-s", "amount_yuan": 180000, "note": "其余18万元继续扣押" }
+      },
+      "note": "部分退赔12万元"
+    },
+    {
+      "id": "E17",
+      "kind": "case_transfer",
+      "actor": "检察人员",
+      "occurred_on": "2021-11-10",
+      "recorded_on": "2021-11-10",
+      "payload": { "to_stage": "审判" },
+      "note": "提起公诉，移送审判"
+    },
+    {
+      "id": "E18",
+      "kind": "court_finding",
+      "actor": "审判人员",
+      "occurred_on": "2022-03-15",
+      "recorded_on": "2022-03-15",
+      "payload": {
+        "findings": [
+          { "batches": ["B2a"], "legal_nature": "请托资金", "note": "丙关于报酬的主张不予认定，100万元系请托资金" },
+          { "batches": ["B2b2-t", "B2b2-s"], "legal_nature": "请托资金（乙截留部分）", "note": "乙关于借款的主张不予认定" },
+          { "batches": ["B2b1"], "legal_nature": "已退回请托人的款项", "note": "案发前已退回甲，不再追缴" },
+          { "batches": ["B1b"], "legal_nature": "请托资金", "note": "乙留存50万元，继续追缴" },
+          { "batches": ["B1a"], "holder": "待核查", "note": "乙称转交丙、丙否认，现金交付事实证据不足，不予认定" }
+        ],
+        "reject_claims": ["C-01", "C-02"],
+        "resolve_leads": [
+          { "lead": "L-01", "status": "已核实", "note": "乙截留30万元部分成立" }
+        ],
+        "undecided": [
+          {
+            "batches": ["B1a"],
+            "issue": "70万元现金去向及乙该部分行为定性存在不同专业意见",
+            "options": ["认定交付丙并向丙追缴", "认定乙截留并向乙追缴"],
+            "note": "另案继续核查"
+          }
+        ]
+      },
+      "note": "一审判决认定"
+    },
+    {
+      "id": "E19",
+      "kind": "case_transfer",
+      "actor": "审判人员",
+      "occurred_on": "2022-04-20",
+      "recorded_on": "2022-04-20",
+      "payload": { "to_stage": "执行" },
+      "note": "判决生效，移送执行"
+    },
+    {
+      "id": "E20",
+      "kind": "surrender",
+      "actor": "涉案财物管理人员",
+      "occurred_on": "2022-05-09",
+      "recorded_on": "2022-05-09",
+      "payload": { "batch": "B2a", "to": "P-TREASURY", "note": "冻结款100万元上缴国库" }
+    },
+    {
+      "id": "E21",
+      "kind": "disburse",
+      "actor": "涉案财物管理人员",
+      "occurred_on": "2022-05-16",
+      "recorded_on": "2022-05-16",
+      "payload": { "batch": "B2b2-t", "to": "P-JIA", "note": "退赔款12万元发还甲" }
+    }
+  ]
+}
